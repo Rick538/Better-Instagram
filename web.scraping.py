@@ -2,10 +2,12 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
+import selenium.webdriver
 import time
 import pickle
 from selenium import webdriver
-import os.path
+import json
+
 
 #Opening the firefox
 firefox_options = Options()
@@ -16,8 +18,8 @@ driver = webdriver.Firefox(options=options)
 
 
 
-#Creating the cookie
-def Creating_Cookie():
+#Loging to the instagram
+def Login():
 
     driver.get('https://www.instagram.com')
 
@@ -46,25 +48,8 @@ def Creating_Cookie():
     submit_el = driver.find_element(By.CSS_SELECTOR,"button[type='submit']")
     time.sleep(5)
     submit_el.click()
-    save_cookie(driver,'C:/tmp/cookie')
 
-#Saving cookie
-def save_cookie(driver, path):
-    with open(path, 'wb') as filehandler:
-        pickle.dump(driver.get_cookies(), filehandler)
-#Loading cookie
-def load_cookie(driver, path):
-     with open(path, 'rb') as cookiesfile:
-         cookies = pickle.load(cookiesfile)
-         for cookie in cookies:
-            driver.add_cookie(cookie)
-
-#Checking if cookie is saved
-check_file = os.path.exists('C:/tmp/cookie')
-if not check_file:
-    Creating_Cookie()
-else:
-    load_cookie(driver, 'C:/tmp/cookie')
+Login()
 
 try:
     #Loading instagram web.profile
@@ -83,9 +68,16 @@ try:
     time.sleep(5)
 
     #Looking for date of image
-    image_date = driver.find_element(By.CSS_SELECTOR,'._aaqe')
+    image_date = driver.find_element(By.CSS_SELECTOR,'.x1yxbuor')
     time.sleep(5)
     print(image_date)
+
+    #Looking for Likes image
+    time.sleep(5)
+    likes = driver.find_element(By.CSS_SELECTOR,'div.x2lwn1j:nth-child(2) > span:nth-child(1) > a:nth-child(2) > span:nth-child(1) > span:nth-child(1)')
+    time.sleep(5)
+    print(likes)
+
 except:
     print("chyba")
 time.sleep(50)
