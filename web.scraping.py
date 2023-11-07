@@ -5,14 +5,13 @@ from selenium.webdriver.firefox.options import Options
 import selenium.webdriver
 import time
 import pickle
-from selenium import webdriver
 import json
 
 
 #Opening the firefox
-firefox_options = Options()
+firefox_options = Options(r"C:/geckodriver.exe")
 options = Options()
-##options.add_argument("-headless")
+options.add_argument("-headless")
 driver = webdriver.Firefox(options=options)
 ##print("headless inicialized")
 
