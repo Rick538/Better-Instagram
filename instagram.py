@@ -2,7 +2,7 @@ import instaloader
 import time
 import json
 import re
-from chatgpt_selenium_automation.handler.chatgpt_selenium_automation import ChatGPTAutomation
+from chatgpt_selenium_automation import ChatGPTAutomation
 from selenium.webdriver.firefox.options import Options
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -67,7 +67,7 @@ chatgpt.send_prompt_to_chatgpt(question)
 response = chatgpt.return_last_response()
 print(response)
 
-file_name = r"B:\conve\conversation.txt"
+file_name = r"conversation.txt"
 chatgpt.save_conversation(file_name)
 print(file_name)
 
