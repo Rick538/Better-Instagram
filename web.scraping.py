@@ -6,6 +6,7 @@ import selenium.webdriver
 import time
 import pickle
 import json
+from secret import USERNAME, PASSWORD
 
 
 #Opening the firefox
@@ -20,20 +21,18 @@ driver = webdriver.Firefox(options=options)
 #Loging to the instagram
 def Login():
 
-    driver.get('https://www.instagram.com')
+    driver.get('https://chat.openai.com')
 
     #Entering the site
     try:
         time.sleep(5)
-        click = driver.find_element(By.CSS_SELECTOR,'button._a9--:nth-child(2)')
+        click = driver.find_element(By.CSS_SELECTOR,'button.relative:nth-child(1)')
         click.click()
         time.sleep(5)
     except Exception:
-        print("Servers of instagram are down, please try again later")
+        print("Servers of chatgpt are down, please try again later")
 
     ##Logining to the instagram
-    USERNAME = 'karlito_podel9'
-    PASSWORD = 'AeeRhKK*27869'
     time.sleep(5)
     username_el = driver.find_element(By.NAME,'username')
     time.sleep(5)
