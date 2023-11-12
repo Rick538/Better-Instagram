@@ -8,17 +8,18 @@ import json
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from secret import USERNAME, PASSWORD
+from selenium.webdriver.common.keys import Keys
 
 
  
 # Creating an instance of the Instaloader class
 #username = input("Enter your Instagram username: ")
-def load_session_from_file():
+def load_session_from_file(username):
     bot = instaloader.Instaloader()
     bot.load_session_from_file("karlito_podel9")
     #Loading a profile from an Instagram handle
 
-    profile = instaloader.Profile.from_username(bot.context, 'josef.jindra.666')
+    profile = instaloader.Profile.from_username(bot.context, username)
 
 
 #Opening the google browser
@@ -62,24 +63,41 @@ def print_jason():
         formated = re.sub(r'[{}"\[\],]','', json.dumps(data, indent=3))
         return formated
     
-def Sending_prompt_to_chatgpt(question):
-
+def Sending_prompt_to_chatgpt():
+    """Send a data from instagram to the chatgpt for analytics of better performance"""
+    json_data = str(print_jason())
+    question = ("Tell me what should i change on my instagram profile to make it better and get more attention from people, use this data for analysis:"
+    "1) username: do you think that this username is good? or you think i should change it to make my profile look better" 
+    "2) bio: do you think that this bio is good and creative or at least if it can tell what person im? "
+    "3) hastags: are those hastags that i have on my post good or should i try add newer?"
+    "4) date: should i posted a more posts in short time or is this period good, like should i post every day or week"
+    "5) caption: is the text of the caption good? or i should change it into something more informative, like info about the author or the post"
+    "Please answer in the following questions and on the end of every question and add some space at the end, please do not write the question, but only the point and the first word in which it is found and the answer, because it would be helpful and more readable")
     driver.get("https://chat.openai.com")
-    time.sleep(3)
+    time.sleep(5) 
+    driver.find_element(By.ID,'prompt-textarea').send_keys(Keys.ENTER)
+    time.sleep(2)
     driver.find_element(By.ID,'prompt-textarea').send_keys(question)
+    time.sleep(2)
+    lines = json_data.splitlines()
+    for line in lines:
+        if line != '\n':
+            driver.find_element(By.ID,'prompt-textarea').send_keys(line)
+    time.sleep(5)
+    driver.find_element(By.CSS_SELECTOR,"button.absolute").click()
     time.sleep(3)
-    button_send = driver.find_element(By.CSS_SELECTOR,"button.absolute")
-    time.sleep(3)
-    button_send.click()
+    Taking_response_data()
 
 def Taking_response_data():
-    time.sleep(15)
-    response_from_chatgpt = driver.find_element(By.CSS_SELECTOR,"div.group:nth-child(5) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)")
+    """Takes data from chatgpt and prints it to the screen"""
+    time.sleep(10)
+    response_from_chatgpt = driver.find_element(By.CSS_SELECTOR,"#__next > div.relative.z-0.flex.h-full.w-full.overflow-hidden > div.relative.flex.h-full.max-w-full.flex-1.flex-col.overflow-hidden > main > div.flex.h-full.flex-col > div.flex-1.overflow-hidden > div > div > div > div.group.w-full.text-token-text-primary.border-b.border-black\/10.gizmo\:border-0.dark\:border-gray-900\/50.gizmo\:dark\:border-0.bg-gray-50.gizmo\:bg-transparent.dark\:bg-\[\#444654\].gizmo\:dark\:bg-transparent > div > div > div.relative.flex.w-\[calc\(100\%-50px\)\].flex-col.gizmo\:w-full.lg\:w-\[calc\(100\%-115px\)\].agent-turn > div > div.flex.flex-grow.flex-col.max-w-full.gap-3.gizmo\:gap-0 > div > div")
     time.sleep(5)
-    return response_from_chatgpt.text
+    print(response_from_chatgpt.text)
 
 
 def login_into_chatgpt(USERNAME,PASSWORD):
+        """This will login into your account in chatgpt if you dont have cookies, and makes you cookies so u dont have to write an email, password every time"""
         login_button = driver.find_element(By.CSS_SELECTOR,'#__next > div.flex.min-h-full.w-screen.flex-col.sm\:supports-\[min-height\:100dvh\]\:min-h-\[100dvh\].md\:grid.md\:grid-cols-2.lg\:grid-cols-\[60\%_40\%\] > div.relative.flex.grow.flex-col.items-center.justify-between.bg-white.px-5.py-8.text-black.dark\:bg-black.dark\:text-white.sm\:rounded-t-\[30px\].md\:rounded-none.md\:px-6 > div.relative.flex.w-full.grow.flex-col.items-center.justify-center > div > div > button:nth-child(1)')
         login_button.click()
         time.sleep(3)
@@ -100,14 +118,8 @@ def login_into_chatgpt(USERNAME,PASSWORD):
         button.click()
         time.sleep(3)
 
-question = "Tell me what should i change on my instagram profile to make it better and get more attention from people, use this data for analysis:" + print_jason()
-
 #Takes a list of data from instagram and write them into a json.file
 #post_data()
-
 #This will print formated data from json.file
 #print_jason()
-#Sends data to chatgpt
-Sending_prompt_to_chatgpt(question)
-#Takes response data from chatgpt
-Taking_response_data()
+Sending_prompt_to_chatgpt()
