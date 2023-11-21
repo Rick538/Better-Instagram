@@ -9,9 +9,6 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from secret import USERNAME, PASSWORD
 from selenium.webdriver.common.keys import Keys
-import requests
-from icecream import ic
-
 
  
 # Creating an instance of the Instaloader class
