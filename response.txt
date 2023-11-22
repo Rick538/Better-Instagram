@@ -1,0 +1,1 @@
+ 'Post_id' 11 'Post date' '2020-04-30 152947' 'Post caption' '' 'Post likes count' 8 'Post comments count' 0 'Post location' None 'Post hashtags'
