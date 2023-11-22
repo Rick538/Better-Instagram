@@ -9,6 +9,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from secret import USERNAME, PASSWORD
 from selenium.webdriver.common.keys import Keys
+import requests
 
  
 # Creating an instance of the Instaloader class
@@ -80,13 +81,15 @@ def Sending_prompt_to_chatgpt():
     """Send a data from instagram to the chatgpt for analytics of better performance"""
     driver = Opening_Google()
     data_for_chatgpt = str(print_jason())
-    question = """Tell me what should i change on my instagram profile to make it better and get more attention from people, use this data for analysis:
+    question = """
+    Tell me what should i change on my instagram profile to make it better, please use this data for analysis:
     1) username: do you think that this username is good? or you think i should change it to make my profile look better"
     2) bio: do you think that this bio is good and creative or at least if it can tell what person im? 
     3) hastags: are those hastags that i have on my post good or should i try add newer?
     4) date: should i posted a more posts in short time or is this period good, like should i post every day or week
     5) caption: is the text of the caption good? or i should change it into something more informative, like info about the author or the post
     Please answer in the following questions and on the end of every question, and add some space at the end, please do not write the question, but only the point and the first word in which it is found and the answer, because it would be helpful and more readable
+    And write some solutions for the following questions or examples, so i can see what im doing wrong.
     """ + data_for_chatgpt
     print(question)
     time.sleep(5)
@@ -103,22 +106,25 @@ def Sending_prompt_to_chatgpt():
     time.sleep(5)
     driver.find_element(By.CSS_SELECTOR,"button.absolute").click()
     time.sleep(3)
-    Taking_response_data(driver)
+    Taking_response_data()
 
-def Taking_response_data(driver):
+def Taking_response_data():
     """Takes data from chatgpt and prints it to the screen"""
+    driver = Opening_Google()
     time.sleep(10)
-    response_from_chatgpt = driver.find_element(By.CSS_SELECTOR,"#__next > div.relative.z-0.flex.h-full.w-full.overflow-hidden > div.relative.flex.h-full.max-w-full.flex-1.flex-col.overflow-hidden > main > div.flex.h-full.flex-col > div.flex-1.overflow-hidden > div > div > div > div.group.w-full.text-token-text-primary.border-b.border-black\/10.gizmo\:border-0.dark\:border-gray-900\/50.gizmo\:dark\:border-0.bg-gray-50.gizmo\:bg-transparent.dark\:bg-\[\#444654\].gizmo\:dark\:bg-transparent > div > div > div.relative.flex.w-\[calc\(100\%-50px\)\].flex-col.gizmo\:w-full.lg\:w-\[calc\(100\%-115px\)\].agent-turn > div > div.flex.flex-grow.flex-col.max-w-full.gap-3.gizmo\:gap-0 > div > div")
+    response_from_chatgpt = driver.find_element(By.CSS_SELECTOR,"#__next > div.relative.z-0.flex.h-full.w-full.overflow-hidden > div.relative.flex.h-full.max-w-full.flex-1.flex-col.overflow-hidden > main > div.flex.h-full.flex-col > div.flex-1.overflow-hidden > div > div > div > div.w-full.text-token-text-primary.border-b.border-black\/10.gizmo\:border-0.dark\:border-gray-900\/50.gizmo\:dark\:border-0.bg-gray-50.gizmo\:bg-transparent.dark\:bg-\[\#444654\].gizmo\:dark\:bg-transparent > div > div > div.relative.flex.w-\[calc\(100\%-50px\)\].flex-col.gizmo\:w-full.lg\:w-\[calc\(100\%-115px\)\].agent-turn > div.flex-col.gap-1.md\:gap-3 > div.flex.flex-grow.flex-col.max-w-full.gap-3.gizmo\:gap-0 > div > div")
     time.sleep(5)
     response = open('response.txt', 'w')
     response.write(response_from_chatgpt)
     print(response.read())
 
 def main():
-    #Takes a list of data from instagram and write them into a json.file
     profile_data()
     Sending_prompt_to_chatgpt()
+
+
 main()
+
    
 
 
