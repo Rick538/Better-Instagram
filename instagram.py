@@ -147,29 +147,81 @@ def Taking_response_data():
 def chatgpt():
     data_for_chatgpt = str(print_jason())
     question = """
-    Use data i sent you at the end of this message.
+        Use data i sent you at the end of this message.
 
-    Tell me what I should change on my Instagram profile to make it better, follow these points:
-        1) username: do you think the username I'm using is creative and original, or should I change it?
-        2) bio: is this bio original and if so why do you think so, if not then why and what should I change.
-        3) hastags: are the hastags I have on my post good or should I change them, add new ones.
-        4) date: should I post more in a short time or is this period good, should I post every day or week?
-        5) headline: is the headline text good? or should I change it to something more informative, like information about the author or post, or where I am
-        Please answer the following questions in order so that they make sense and are legible.
-    And finally, write down examples of how it could be and compare it with the data I sent.
-    Please write that down in points so it would be easier to understand.
-    """ + data_for_chatgpt
-    model = GPT4All('mistral-7b-openorca.Q4_0.gguf')
-    print(question)
-    output = model.generate(prompt=question, max_tokens=2048, temp=0)
+        Tell me what I should change on my Instagram profile to make it better, follow these points:
+            1) username: do you think the username I'm using is creative and original, or should I change it?
+            2) bio: is this bio original and if so why do you think so, if not then why and what should I change.
+            3) hastags: are the hastags I have on my post good or should I change them, add new ones.
+            4) date: should I post more in a short time or is this period good, should I post every day or week?
+            5) headline: is the headline text good? or should I change it to something more informative, like information about the author or post, or where I am
+            Please answer the following questions in order so that they make sense and are legible.
+        And finally, write down examples of how it could be and compare it with the data I sent.
+        Please write that down in points so it would be easier to understand.
+        """ + data_for_chatgpt
+
+    model = GPT4All("mistral-7b-openorca.Q4_0.gguf")
+
+    output = model.generate(prompt=str(question), max_tokens=4096, temp=0)
     print(output)
+
     with open('response.txt', 'w') as response:
-        response.write(output)
+        response.write(str(output))
+
+
+
+def chat():
+    import openai
+    data_for_chatgpt = str(print_jason())
+    question =  data_for_chatgpt + """
+        Use data i sent you at the start of this message.
+
+        Tell me what I should change on my Instagram profile to make it better, follow these points:
+            1) username: do you think the username I'm using is creative and original, or should I change it?
+            2) bio: is this bio original and if so why do you think so, if not then why and what should I change.
+            3) hastags: are the hastags I have on my post good or should I change them, add new ones.
+            4) date: should I post more in a short time or is this period good, should I post every day or week?
+            5) headline: is the headline text good? or should I change it to something more informative, like information about the author or post, or where I am
+            Please answer the following questions in order so that they make sense and are legible.
+        And finally, write down examples of how it could be and compare it with the data I sent.
+        Write only answers and in points so it would be easier to understand.
+        """
+
+    openai.api_base = "http://localhost:4891/v1"
+    #openai.api_base = "https://api.openai.com/v1"
+
+    openai.api_key = "not needed for a local LLM"
+
+    # Set up the prompt and other parameters for the API request
+    prompt = question
+
+    # model = "gpt-3.5-turbo"
+    #model = "mpt-7b-chat"
+    model = "gpt4all-j-v1.3-groovy"
+
+    # Make the API request
+    
+    response = openai.Completion.create(
+        model=model,
+        message=[
+            {'role':'user', 'content': prompt}
+        ],
+        max_tokens=4096,
+        temperature=0,
+        echo=True,
+        stream=False
+    )
+
+    answer = response['choices'][0]['message']['content']
+    print("Zde je popis jak vylepšit váš instagram:")
+    print(answer)
+
 
 def main():
 
     #profile_data()
-    chatgpt()
+    chat()
+    #chatgpt()
     #Sending_prompt_to_chatgpt()
 main()
 
