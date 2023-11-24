@@ -72,35 +72,11 @@ def profile_data():
                 json.dump(post_data_list, json_file, ensure_ascii=False,indent=3)
             print_jason()
 
-def remove_emoji(post_data_list):
-            emoji_pattern = re.compile("["
-                                    u"\U0001F600-\U0001F64F"  # emoticons
-                                    u"\U0001F300-\U0001F5FF"  # symbols & pictographs
-                                    u"\U0001F680-\U0001F6FF"  # transport & map symbols
-                                    u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
-                                    u"\U00002500-\U00002BEF"  # chinese char
-                                    u"\U00002702-\U000027B0"
-                                    u"\U00002702-\U000027B0"
-                                    u"\U000024C2-\U0001F251"
-                                    u"\U0001f926-\U0001f937"
-                                    u"\U00010000-\U0010ffff"
-                                    u"\u2640-\u2642"
-                                    u"\u2600-\u2B55"
-                                    u"\u200d"
-                                    u"\u23cf"
-                                    u"\u23e9"
-                                    u"\u231a"
-                                    u"\ufe0f"  # dingbats
-                                    u"\u3030"
-                                    "]+", flags=re.UNICODE)
-            return emoji_pattern.sub(r'', post_data_list)
-
 def print_jason():
     """This will formate data in json.file into readable text for chatgpt"""
     with open('post_data.json', 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
-        data = remove_emoji(str(data))
-        formated = re.sub(r'[:{}"\[\],]','', json.dumps(data, indent=3))
+        formated = re.sub(r'[:{}"\[\],]', json.dumps(data, indent=3))
         return formated
 
 def Sending_prompt_to_chatgpt():
@@ -188,30 +164,26 @@ def chat():
         """
 
     openai.api_base = "http://localhost:4891/v1"
-    #openai.api_base = "https://api.openai.com/v1"
 
     openai.api_key = "not needed for a local LLM"
-
-    # Set up the prompt and other parameters for the API request
     prompt = question
 
-    # model = "gpt-3.5-turbo"
-    #model = "mpt-7b-chat"
     model = "gpt4all-j-v1.3-groovy"
 
     # Make the API request
     
-    response = openai.Completion.create(
+    response = openai.ChatCompletion.create(
         model=model,
-        message=[
-            {'role':'user', 'content': prompt}
-        ],
+        messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": question}
+    ],
         max_tokens=4096,
         temperature=0,
-        echo=True,
-        stream=False
+        echo=False,
+        stream=False,
+        stop=None
     )
-
     answer = response['choices'][0]['message']['content']
     print("Zde je popis jak vylepšit váš instagram:")
     print(answer)
