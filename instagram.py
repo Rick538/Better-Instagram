@@ -12,10 +12,11 @@ from gpt4all import GPT4All
 import pandas as pd
 import openai
 
+max_post_number = 8
+post_data_list = []
 
-def load_instagram():
+def load_instagram(username):
     """Load data from instagram"""
-    username = input("Enter your Instagram username: ")
     bot = instaloader.Instaloader()
     bot.load_session_from_file("karlito_podel9")
     profile_insta = instaloader.Profile.from_username(bot.context, username)
@@ -27,10 +28,10 @@ def clear_post_data():
     with open('post_data.json', 'w', encoding='utf-8') as json_file:
         json_file.truncate()
 
-def profile_data():
+def profile_data(username):
     """Takes data from instagram profile and save them into json.file"""
     clear_post_data()
-    profile = load_instagram()
+    profile = load_instagram(username)
     print("Profile data")
     about_user = {
         "Username:": profile.username,
@@ -39,12 +40,11 @@ def profile_data():
         "Bio:": profile.biography,
         "External URL:": profile.external_url
     }
-    post_number = 0
-    post_data_list = []
     post_data_list.append(about_user)
+    post_number = 0
     for post in profile.get_posts():
         post_number += 1
-        if post_number <= 5:
+        if post_number <= max_post_number:
             time.sleep(5)
             post_dict = {
                 "Post_id:": post_number,
@@ -67,16 +67,27 @@ def format_jason():
         data = json.load(json_file)
         formated = re.sub(r'[:{}"\[\].,]','',json.dumps(data, indent=3))
         return formated
+
+def checking_tokens(max_post_number,words):
+    if words > 3827:
+        max_post_number -= 1
+        profile_data()
     
+
 def format_data_to_text():
     df = pd.read_json (r'C:\Users\karel\OneDrive\Plocha\škola\zapocet z programka\post_data.json')
     df.to_csv (r'C:\Users\karel\OneDrive\Plocha\škola\zapocet z programka\formated_data.txt', index = False)
     with open('formated_data.txt', 'r', encoding='utf-8') as form:
         f = re.sub(r'[:{}"\[\]\'.,]','',form.read())
+        word = f.split()
+        words = len(word)
+        checking_tokens(max_post_number,words)
         return f
 
 def chat():
+    format_data_to_text()
     data_for_chatgpt = format_data_to_text()
+
     question =  str(data_for_chatgpt) + """
         Use data i sent you at the start of this message.
 
@@ -113,7 +124,8 @@ def chat():
     print(answer)
 
 def main():
-    profile_data()
+    username = input("Enter your Instagram username: ")
+    profile_data(username)
     format_data_to_text()
     chat()
 main()
