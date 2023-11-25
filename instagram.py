@@ -5,16 +5,14 @@ import re
 from selenium.webdriver.common.by import By
 import time
 import json
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from secret import USERNAME, PASSWORD
 from selenium.webdriver.common.keys import Keys
 import requests
 from gpt4all import GPT4All
-import sys
+import pandas as pd
+import openai
 
- 
-# Creating an instance of the Instaloader class
+
 def load_instagram():
     """Load data from instagram"""
     username = input("Enter your Instagram username: ")
@@ -61,22 +59,25 @@ def profile_data():
         else:
             with open('post_data.json', 'w', encoding='utf-8') as json_file:
                 json.dump(post_data_list, json_file, ensure_ascii=False,indent=3)
-            print_jason()
+            format_jason()
 
-def print_jason():
+def format_jason():
     """This will formate data in json.file into readable text for chatgpt"""
     with open('post_data.json', 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
-        formated = re.sub(r'[:\[\]{}",]','', json.dumps(data, indent=3))
+        formated = re.sub(r'[:{}"\[\].,]','',json.dumps(data, indent=3))
         return formated
-def formated_data(formated):
-    with open('formated_data.txt', 'w', encoding='utf-8') as file:
-        file.write(formated)
     
+def format_data_to_text():
+    df = pd.read_json (r'C:\Users\karel\OneDrive\Plocha\škola\zapocet z programka\post_data.json')
+    df.to_csv (r'C:\Users\karel\OneDrive\Plocha\škola\zapocet z programka\formated_data.txt', index = False)
+    with open('formated_data.txt', 'r', encoding='utf-8') as form:
+        f = re.sub(r'[:{}"\[\]\'.,]','',form.read())
+        return f
+
 def chat():
-    import openai
-    data_for_chatgpt = str(print_jason())
-    question =  data_for_chatgpt + """
+    data_for_chatgpt = format_data_to_text()
+    question =  str(data_for_chatgpt) + """
         Use data i sent you at the start of this message.
 
         Tell me what I should change on my Instagram profile to make it better, follow these points:
@@ -84,19 +85,17 @@ def chat():
             2) bio: is this bio original and if so why do you think so, if not then why and what should I change.
             3) hastags: are the hastags I have on my post good or should I change them, add new ones.
             4) date: should I post more in a short time or is this period good, should I post every day or week?
-            5) headline: is the headline text good? or should I change it to something more informative, like information about the author or post, or where I am
+            5) headline: is the headline text good? or should I change it to something more informative, like information about the author or post, or where I am.
             Please answer the following questions in order so that they make sense and are legible.
         And finally, write down examples of how it could be and compare it with the data I sent.
         Write only answers and in points so it would be easier to understand.
         """
 
     openai.api_base = "http://localhost:4891/v1"
-
+    print(question)
     openai.api_key = "not needed for a local LLM"
+    model = "orca-mini-3b-gguf2-q4_0.gguf"
 
-    model = "mistral-7b-openorca.Q4_0.gguf"
-    with open('formated_data.txt', 'r', encoding='utf-8') as f:
-        print(f.read())
     response = openai.ChatCompletion.create(
         model=model,
         messages=[
@@ -115,6 +114,7 @@ def chat():
 
 def main():
     profile_data()
+    format_data_to_text()
     chat()
 main()
 
