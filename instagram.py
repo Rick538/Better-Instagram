@@ -12,8 +12,8 @@ from gpt4all import GPT4All
 import pandas as pd
 import openai
 
-max_post_number = 8
 post_data_list = []
+max_number = 8
 
 def load_instagram(username):
     """Load data from instagram"""
@@ -23,14 +23,16 @@ def load_instagram(username):
     print("Instagram profile")
     return profile_insta
 
-def clear_post_data():
+def clear_all_data():
     """Clear the json file named post_data"""
     with open('post_data.json', 'w', encoding='utf-8') as json_file:
         json_file.truncate()
+    with open('formated_data.txt', 'w', encoding='utf-8') as f:
+        f.close()
 
-def profile_data(username):
+def profile_data():
     """Takes data from instagram profile and save them into json.file"""
-    clear_post_data()
+    clear_all_data()
     profile = load_instagram(username)
     print("Profile data")
     about_user = {
@@ -42,9 +44,10 @@ def profile_data(username):
     }
     post_data_list.append(about_user)
     post_number = 0
+    print(max_number)
     for post in profile.get_posts():
         post_number += 1
-        if post_number <= max_post_number:
+        if post_number <= max_number:
             time.sleep(5)
             post_dict = {
                 "Post_id:": post_number,
@@ -65,29 +68,38 @@ def format_jason():
     """This will formate data in json.file into readable text for chatgpt"""
     with open('post_data.json', 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
-        formated = re.sub(r'[:{}"\[\].,]','',json.dumps(data, indent=3))
-        return formated
-
-def checking_tokens(max_post_number,words):
-    if words > 3827:
-        max_post_number -= 1
-        profile_data()
-    
+        formated_json = re.sub(r'[:{}"\[\].,]','',json.dumps(data, indent=3))
+        print(formated_json)
+        return formated_json
 
 def format_data_to_text():
     df = pd.read_json (r'C:\Users\karel\OneDrive\Plocha\škola\zapocet z programka\post_data.json')
     df.to_csv (r'C:\Users\karel\OneDrive\Plocha\škola\zapocet z programka\formated_data.txt', index = False)
-    with open('formated_data.txt', 'r', encoding='utf-8') as form:
-        f = re.sub(r'[:{}"\[\]\'.,]','',form.read())
-        word = f.split()
+    with open('formated_data.txt', 'r', encoding='utf-8') as formated_text:
+        form = ""
+        form = re.sub(r'[:{}"\[\]\'.,]','',formated_text.read())
+        print(form)
+        word = ""
+        word = form.split()
+        print(word)
+        words = 0
         words = len(word)
-        checking_tokens(max_post_number,words)
-        return f
+        print("words:::")
+        print(words)
+        formated_text.close()
+    checking_tokens(words)
+
+def checking_tokens(words):
+    while words >= 240:
+        global max_number
+        max_number -= 1
+        main()
+    else:
+        chat()
 
 def chat():
-    format_data_to_text()
-    data_for_chatgpt = format_data_to_text()
-
+    with open('formated_data.txt', 'r', encoding='utf-8') as data:
+        data_for_chatgpt = data.read()
     question =  str(data_for_chatgpt) + """
         Use data i sent you at the start of this message.
 
@@ -123,15 +135,9 @@ def chat():
     print("Zde je popis jak vylepšit váš instagram:")
     print(answer)
 
+username = input("Enter your Instagram username: ")
 def main():
-    username = input("Enter your Instagram username: ")
-    profile_data(username)
+    profile_data()
     format_data_to_text()
     chat()
 main()
-
-   
-
-
-
-
