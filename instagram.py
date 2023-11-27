@@ -12,7 +12,6 @@ from gpt4all import GPT4All
 import pandas as pd
 import openai
 
-post_data_list = []
 max_number = 8
 
 def load_instagram(username):
@@ -20,7 +19,6 @@ def load_instagram(username):
     bot = instaloader.Instaloader()
     bot.load_session_from_file("karlito_podel9")
     profile_insta = instaloader.Profile.from_username(bot.context, username)
-    print("Instagram profile")
     return profile_insta
 
 def clear_all_data():
@@ -33,8 +31,8 @@ def clear_all_data():
 def profile_data():
     """Takes data from instagram profile and save them into json.file"""
     clear_all_data()
+    post_data_list = []
     profile = load_instagram(username)
-    print("Profile data")
     about_user = {
         "Username:": profile.username,
         "Number of Posts:": profile.mediacount,
@@ -44,7 +42,6 @@ def profile_data():
     }
     post_data_list.append(about_user)
     post_number = 0
-    print(max_number)
     for post in profile.get_posts():
         post_number += 1
         if post_number <= max_number:
@@ -69,27 +66,21 @@ def format_jason():
     with open('post_data.json', 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
         formated_json = re.sub(r'[:{}"\[\].,]','',json.dumps(data, indent=3))
-        print(formated_json)
         return formated_json
 
 def format_data_to_text():
     df = pd.read_json (r'C:\Users\karel\OneDrive\Plocha\škola\zapocet z programka\post_data.json')
     df.to_csv (r'C:\Users\karel\OneDrive\Plocha\škola\zapocet z programka\formated_data.txt', index = False)
     with open('formated_data.txt', 'r', encoding='utf-8') as formated_text:
-        form = ""
         form = re.sub(r'[:{}"\[\]\'.,]','',formated_text.read())
-        print(form)
-        word = ""
         word = form.split()
-        print(word)
         words = 0
         words = len(word)
-        print("words:::")
-        print(words)
         formated_text.close()
     checking_tokens(words)
 
 def checking_tokens(words):
+    print(f"words: {words}")
     while words >= 240:
         global max_number
         max_number -= 1
@@ -100,24 +91,21 @@ def checking_tokens(words):
 def chat():
     with open('formated_data.txt', 'r', encoding='utf-8') as data:
         data_for_chatgpt = data.read()
-    question =  str(data_for_chatgpt) + """
-        Use data i sent you at the start of this message.
-
+    question =  """
         Tell me what I should change on my Instagram profile to make it better, follow these points:
             1) username: do you think the username I'm using is creative and original, or should I change it?
             2) bio: is this bio original and if so why do you think so, if not then why and what should I change.
             3) hastags: are the hastags I have on my post good or should I change them, add new ones.
-            4) date: should I post more in a short time or is this period good, should I post every day or week?
-            5) headline: is the headline text good? or should I change it to something more informative, like information about the author or post, or where I am.
+            4) headline: is the headline text good? or should I change it to something more informative, like information about the author or post, or where I am.
+            5) date: should I post more in a short time or is this period good, should I post every day or week?
             Please answer the following questions in order so that they make sense and are legible.
-        And finally, write down examples of how it could be and compare it with the data I sent.
         Write only answers and in points so it would be easier to understand.
-        """
+        And finally, write down some understandable examples of how it could be a better.
+        """ + str(data_for_chatgpt)
 
     openai.api_base = "http://localhost:4891/v1"
-    print(question)
     openai.api_key = "not needed for a local LLM"
-    model = "orca-mini-3b-gguf2-q4_0.gguf"
+    model = "mistral-7b-openrca.Q4_0.gguf"
 
     response = openai.ChatCompletion.create(
         model=model,
