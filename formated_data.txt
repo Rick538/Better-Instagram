@@ -1,35 +1,5 @@
-Username:,Number of Posts:,Following Count:,Bio:,External URL:,Post_id:,Post date:,Post caption:,Post likes count:,Post comments count:,Post location:,Post hashtags:
-anetterucker,123.0,64.0,"📍Praha • twin • tvůrce videí🤳🏻• D💍
+Username:,Number of Posts:,Following Count:,Bio:,External URL:
+anetterucker,123,64,"📍Praha • twin • tvůrce videí🤳🏻• D💍
 🎥 TikTok: anette.rucker (340k+ )
 📩 spolupráce: anette.rucker@spoluprace.cz
-👇🏻MERCH 👇🏻",https://www.influmerch.store/anette/,,,,,,,
-,,,,,1.0,2023-07-27 19:04:19,"Yes 💍
-
-#engaged #greece #mylove",7479.0,223.0,"[396733790, 'Řecko, Kos', 'recko-kos', True, 36.8823719, 27.1542332]","['engaged', 'greece', 'mylove']"
-,,,,,2.0,2023-11-15 14:38:03,"Miluju fotky! 📸❤️
-Vždy vám připomenou, co krásného jste už prožili. Tady je ale možnost kromě fotky na plátně mít i video 👀😨
-
-💍 Zásnuby jsou jedna z věcí, kterou si člověk bude pamatovat celý svůj život a já díky @relive.ar na to mohu vzpomínat každý den, protože plátno od nich mám rovnou naproti posteli 😅
-
-Jak už jsem zmiňovala, tak si k fotce máte možnost do QR kódu nahrát i video. 
-Já tam mám třeba video západu slunce u moře.. na místě kde jsem byla požádaná o ruku... 💍😍
-
-Pokud i vy si chcete pořídit takovouhle krásnou vzpomínku na cokoliv co jste prožili, 
-
-mám pro vás slevový kod : ANETTE15 
-
-Děkuju @relive.ar za zaslání🫶🏻
-
-#spoluprace #couple #engaged #photo #love #happy #zasnuby",908.0,41.0,,"['spoluprace', 'couple', 'engaged', 'photo', 'love', 'happy', 'zasnuby']"
-,,,,,3.0,2023-11-12 13:34:35,"👶🏼🍼už bych asi chtěla..😅
-
-#reel #reels #tiktok #fun #couple #baby #love #joke #like #share",2203.0,7.0,,"['reel', 'reels', 'tiktok', 'fun', 'couple', 'baby', 'love', 'joke', 'like', 'share']"
-,,,,,4.0,2023-10-27 14:56:10,"Tyhle fotečky si sem chci ještě hodit 🤩👀
-
-Teď už budou jen v bundách a zimě👀🥶🥶😰
-
-Léto x Zima?
-
-📸@ruckie_videos 
-
-#photo #photoshoot #girl #czech #autumn #happy #instadaily #me",874.0,45.0,"[916557865399320, 'Waltrovka', 'waltrovka', True, 50.056739, 14.370576]","['photo', 'photoshoot', 'girl', 'czech', 'autumn', 'happy', 'instadaily', 'me']"
+👇🏻MERCH 👇🏻",https://www.influmerch.store/anette/
