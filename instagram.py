@@ -2,34 +2,31 @@ import instaloader
 import time
 import json
 import re
-from selenium.webdriver.common.by import By
+
 import time
 import json
-from secret import USERNAME, PASSWORD
-from selenium.webdriver.common.keys import Keys
-import requests
-from gpt4all import GPT4All
+
 import pandas as pd
 import openai
 
 max_number = 8
 
 def load_instagram(username):
-    """Load data from instagram"""
+    """Load instagram profile"""
     bot = instaloader.Instaloader()
     bot.load_session_from_file("karlito_podel9")
     profile_insta = instaloader.Profile.from_username(bot.context, username)
     return profile_insta
 
 def clear_all_data():
-    """Clear the json file named post_data"""
+    """Clear the json file and the text file"""
     with open('post_data.json', 'w', encoding='utf-8') as json_file:
         json_file.truncate()
     with open('formated_data.txt', 'w', encoding='utf-8') as f:
         f.close()
 
 def profile_data():
-    """Takes data from instagram profile and save them into json.file"""
+    """Takes data from instagram profile and save them into json file"""
     clear_all_data()
     post_data_list = []
     profile = load_instagram(username)
@@ -59,16 +56,9 @@ def profile_data():
         else:
             with open('post_data.json', 'w', encoding='utf-8') as json_file:
                 json.dump(post_data_list, json_file, ensure_ascii=False,indent=3)
-            format_jason()
-
-def format_jason():
-    """This will formate data in json.file into readable text for chatgpt"""
-    with open('post_data.json', 'r', encoding='utf-8') as json_file:
-        data = json.load(json_file)
-        formated_json = re.sub(r'[:{}"\[\].,]','',json.dumps(data, indent=3))
-        return formated_json
 
 def format_data_to_text():
+    """Takes data from json file and put it into text file, and retuns formated data i will use in my question(prompt)"""
     df = pd.read_json (r'C:\Users\karel\OneDrive\Plocha\škola\zapocet z programka\post_data.json')
     df.to_csv (r'C:\Users\karel\OneDrive\Plocha\škola\zapocet z programka\formated_data.txt', index = False)
     with open('formated_data.txt', 'r', encoding='utf-8') as formated_text:
@@ -80,7 +70,7 @@ def format_data_to_text():
     checking_tokens(words)
 
 def checking_tokens(words):
-    print(f"words: {words}")
+    """Checking how many words are in text file, because of the size of the prompt and size of the prompt zone"""
     while words >= 240:
         global max_number
         max_number -= 1
@@ -89,6 +79,7 @@ def checking_tokens(words):
         chat()
 
 def chat():
+    """Sending question with data i get from instagram profile to the AI"""
     with open('formated_data.txt', 'r', encoding='utf-8') as data:
         data_for_chatgpt = data.read()
     question =  """
@@ -120,12 +111,11 @@ def chat():
         stop=None
     )
     answer = response['choices'][0]['message']['content']
-    print("Zde je popis jak vylepšit váš instagram:")
-    print(answer)
+    print(f"Here are some instructions to help you improve your instagram profile.\n\n:{answer}")
 
-username = input("Enter your Instagram username: ")
 def main():
     profile_data()
     format_data_to_text()
     chat()
+username = input("Enter your Instagram username: ")
 main()
