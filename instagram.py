@@ -116,6 +116,5 @@ def chat():
 def main():
     profile_data()
     format_data_to_text()
-    chat()
 username = input("Enter your Instagram username: ")
 main()
