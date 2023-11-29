@@ -20,21 +20,34 @@ Gets the answer and print it on the screen.
 
 ## Dependencies
 
-* Instaloader: For accessing Instagram profile data.
+* **Instaloader:** For accessing Instagram profile data.
 
-* Pandas: For data manipulation.
+* **Pandas:** For data manipulation.
 
-* Openai: OpenAI's GPT-3.5 API for natural language processing.
+* **Openai:** OpenAI's GPT-3.5 API for natural language processing.
 
 ## Installation
 
-Firefox driver: [Download](https://github.com/mozilla/geckodriver/releases)
+**Put this into terminal:** `git clone https://github.com/Rick538/Instagram-Profile-Improvement-Assistant.git`
 
-You need to install this geckodriver for Firefox.
+**Install requirements:** `pip install -r requirements.txt`
 
-Gpt4all: [Download](https://gpt4all.io/index.html)
+Put this into terminal in your repository, it will install requirements for the program.
+
+**Gpt4all:** [Download](https://gpt4all.io/index.html)
 
 Before you run the program you need to run this and install the Mistral OpenOrca model.
+
+## Steps
+
+### Step1
+
+Login to the instagram from firefox and run Cookies.py to save session.
+
+### Step2
+
+Run the program and enter your instagram username
+
 
 
 
