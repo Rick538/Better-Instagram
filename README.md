@@ -8,7 +8,7 @@ Then it will give you some examples of how can be your instagram profile improve
 
 ## Overview
 
-Using instaloader to load your instagram profile and save this informations into json file.
+Using instaloader to load your instagram profile and save data into json file.
 
 Converted data from json file into text file and formate them by deleting all the unnecessary characters.
 
