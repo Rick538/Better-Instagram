@@ -10,7 +10,7 @@ max_number = 8
 def load_instagram(username):
     """Load instagram profile"""
     bot = instaloader.Instaloader()
-    bot.load_session_from_file("karlito_podel9")
+    bot.load_session_from_file(username)
     profile_insta = instaloader.Profile.from_username(bot.context, username)
     return profile_insta
 
@@ -107,7 +107,7 @@ def chat():
         stop=None
     )
     answer = response['choices'][0]['message']['content']
-    print(f"Here are some instructions to help you improve your instagram profile.\n\n:{answer}")
+    print(f"Here are some instructions to help you improve your instagram profile: \n\n{answer}")
 
 def main():
     profile_data()
